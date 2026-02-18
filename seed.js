@@ -14,19 +14,19 @@ async function seedData() {
     await Task.deleteMany({});
 
     const user1 = await User.create({
-      username: "mai01",
+      username: "a01",
       password: await bcrypt.hash("123456", 10),
       fullName: "Nguyễn Văn A"
     });
 
     const user2 = await User.create({
-      username: "an02",
+      username: "b02",
       password: await bcrypt.hash("123456", 10),
       fullName: "Trần Văn B"
     });
 
     const user3 = await User.create({
-      username: "hoa03",
+      username: "c03",
       password: await bcrypt.hash("123456", 10),
       fullName: "Nguyễn Thị H"
     });
