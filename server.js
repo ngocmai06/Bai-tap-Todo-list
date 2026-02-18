@@ -18,12 +18,18 @@ app.set("view engine", "ejs");
 
 app.get("/", async (req, res) => {
   const tasks = await Task.find();
-  res.render("index", { tasks });
+
+  const total = tasks.length;
+  const done = tasks.filter(t => t.done).length;
+  const percent = total ? (done / total) * 100 : 0;
+
+  res.render("index", { tasks, percent });
 });
 
 app.post("/add-task", async (req, res) => {
   const newTask = new Task({
-    title: req.body.title
+    title: req.body.title,
+    done: false
   });
 
   await newTask.save();
