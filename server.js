@@ -1,4 +1,5 @@
 const express = require("express");
+const Task = require("./models/Task");
 const connectDB = require("./config/db.js");
 connectDB();
 
@@ -8,8 +9,31 @@ const taskRoutes = require("./routes/taskRoutes");
 const app = express();
 app.use(express.json());
 
+app.use(express.urlencoded({ extended: true }));  
+
 app.use("/users", userRoutes);
 app.use("/tasks", taskRoutes);
+
+app.set("view engine", "ejs");
+
+app.get("/", async (req, res) => {
+  const tasks = await Task.find();
+  res.render("index", { tasks });
+});
+
+app.post("/add-task", async (req, res) => {
+  const newTask = new Task({
+    title: req.body.title
+  });
+
+  await newTask.save();
+  res.redirect("/");
+});
+
+app.post("/delete/:id", async (req, res) => {
+  await Task.findByIdAndDelete(req.params.id);
+  res.redirect("/");
+});
 
 app.listen(3000, () => {
   console.log("Server running at http://localhost:3000");
