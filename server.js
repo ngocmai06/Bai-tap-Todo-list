@@ -41,6 +41,14 @@ app.post("/delete/:id", async (req, res) => {
   res.redirect("/");
 });
 
+app.post("/done/:id", async (req, res) => {
+  await Task.findByIdAndUpdate(req.params.id, {
+    done: true,
+    doneAt: new Date()
+  });
+  res.redirect("/");
+});
+
 app.listen(3000, () => {
   console.log("Server running at http://localhost:3000");
 });

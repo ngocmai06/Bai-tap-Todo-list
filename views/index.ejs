@@ -14,17 +14,41 @@
 
 <ul class="list-group mt-3">
   <% tasks.forEach(task => { %>
-    <li class="list-group-item d-flex justify-content-between">
-      <%= task.title %>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+
+      <span class>
+        <%= task.title %>
+      </span>
 
       <div>
+
+        <% if (!task.done) { %>
+          <form action="/done/<%= task._id %>" method="POST" style="display:inline;">
+            <button class="btn btn-success btn-sm">Hoàn thành</button>
+          </form>
+        <% } %>
+
         <form action="/delete/<%= task._id %>" method="POST" style="display:inline;">
-          <button type="submit">Xóa</button>
+          <button class="btn btn-danger btn-sm">Xóa</button>
         </form>
+
       </div>
+
     </li>
   <% }) %>
 </ul>
+
+<div class="progress mb-3">
+  <div 
+    class="progress-bar 
+      <%= percent == 100 ? 'bg-success' : 'bg-primary' %>" 
+    role="progressbar" 
+    style="width: <%= percent %>%;">
+    
+    <%= Math.round(percent) %>%
+    
+  </div>
+</div>
 
 </body>
 </html>
