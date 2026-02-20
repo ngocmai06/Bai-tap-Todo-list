@@ -3,7 +3,14 @@ const mongoose = require("mongoose");
 const taskSchema = new mongoose.Schema({
   title: String,
   description: String,
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  assignedUsers: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  }],
+  completedUsers: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  }],
   done: { type: Boolean, default: false },
   doneAt: { type: Date, default: null },
   createdAt: { type: Date, default: Date.now }

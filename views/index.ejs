@@ -9,6 +9,15 @@
 
 <form action="/add-task" method="POST">
   <input type="text" name="title" class="form-control mb-2" required>
+  <% if (currentUser && currentUser.role === "admin") { %>
+    <select name="assignedUsers" multiple class="form-control mb-2">
+        <% users.forEach(user => { %>
+            <option value="<%= user._id %>">
+                <%= user.username %>
+            </option>
+            <% }) %>
+        </select>
+        <% } %>
   <button class="btn btn-primary">Thêm</button>
 </form>
 
