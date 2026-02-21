@@ -2,7 +2,7 @@ const express = require("express");
 const Task = require("./models/Task");
 const User = require("./models/User");
 const connectDB = require("./config/db.js");
-const session = require("express-session");
+
 connectDB();
 
 const userRoutes = require("./routes/userRoutes");
@@ -12,6 +12,8 @@ const app = express();
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));  
+
+const session = require("express-session");
 
 app.use(session({
   secret: "secretkey",
@@ -44,16 +46,15 @@ app.get("/", async (req, res) => {
 
 app.post("/add-task", async (req, res) => {
 
+  console.log("Session user:", req.session.user);
+/*
   if (!req.session.user || req.session.user.role !== "admin") {
     return res.send("Bạn không có quyền phân task");
   }
-
+*/
   const newTask = new Task({
     title: req.body.title,
-    description: req.body.description,
-    assignedUsers: Array.isArray(req.body.assignedUsers)
-      ? req.body.assignedUsers
-      : [req.body.assignedUsers]
+    assignedUsers: req.body.assignedUsers
   });
 
   await newTask.save();
@@ -66,20 +67,19 @@ app.post("/delete/:id", async (req, res) => {
 });
 
 app.post("/done/:id", async (req, res) => {
-
+/*
   if (!req.session.user) {
     return res.send("Bạn chưa đăng nhập");
   }
-
+*/
   const task = await Task.findById(req.params.id);
 
-  const currentUserId = req.session.user._id.toString();
+  /*const currentUserId = req.session.user._id.toString();
 
   if (!task.completedUsers.map(id => id.toString()).includes(currentUserId)) {
     task.completedUsers.push(currentUserId);
-    return res.send("Bạn không được phân task này");
   }
-
+*/
   if (task.completedUsers.length === task.assignedUsers.length) {
     task.done = true;
     task.doneAt = new Date();
